@@ -32,13 +32,13 @@ func main() {
 	day := time.Now().Format("02")
 
 	bot.Handle("/today", func(msg *tele.Message) {
-		bot.Send(msg.Chat, historyToday(month, day))
+		bot.Send(msg.Chat, historyToday(month, day), tele.NoPreview, "Markdown")
 	})
 
 	// 定时
 	crontab := cron.New(cron.WithSeconds())
 	task := func() {
-		bot.Send(tele.ChatID(gid), historyToday(month, day), "Markdown")
+		bot.Send(tele.ChatID(gid), historyToday(month, day), tele.NoPreview, "Markdown")
 	}
 	crontab.AddFunc(spec, task)
 
