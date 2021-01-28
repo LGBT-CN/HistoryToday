@@ -53,7 +53,7 @@ func historyToday(month, day string) string {
 	today := month + "-" + day
 
 	if tip.String() != "" {
-		return tip.String() + "=====\n\n" + event.String() + "\n\n" + today
+		return tip.String() + "\n=====\n\n" + event.String() + "\n\n" + today
 	}
 	return event.String() + "\n\n" + today
 }
