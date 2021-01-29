@@ -2,6 +2,7 @@ package main
 
 import (
 	"io/ioutil"
+	"strconv"
 
 	"github.com/robfig/cron/v3"
 	"github.com/tidwall/gjson"
@@ -49,11 +50,26 @@ func main() {
 func historyToday(month, day string) string {
 	data, _ := ioutil.ReadFile(dataFile)
 	tip := gjson.Get(string(data), month+".tip")
-	event := gjson.Get(string(data), month+"."+day)
 	today := month + "-" + day
 
 	if tip.String() != "" {
-		return tip.String() + "\n=====\n\n" + event.String() + "\n\n" + today
+		return tip.String() + "\n=====\n\n" + eventList(month, day) + "\n" + today
 	}
-	return event.String() + "\n\n" + today
+
+	return eventList(month, day) + "\n" + today
+}
+
+func eventList(month, day string) string {
+	data, _ := ioutil.ReadFile("data.json")
+	count, _ := strconv.Atoi((gjson.Get(string(data), month+"."+day+".#")).String())
+	event := ""
+	if (gjson.Get(string(data), month+"."+day+".0")).String() != "" {
+		for i := 0; i < count; i++ {
+			event = event + "\n" + (gjson.Get(string(data), month+"."+day+"."+strconv.Itoa(i))).String()
+		}
+		return event
+	} else {
+		event = "暂无历史今天的性少数群体历程\n你可以前往 GitHub (https://github.com/LGBT-CN/HistoryToday/edit/master/data.json) 提交数据"
+		return event
+	}
 }
