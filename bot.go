@@ -68,8 +68,7 @@ func eventList(month, day string) string {
 			event = event + "\n" + (gjson.Get(string(data), month+"."+day+"."+strconv.Itoa(i))).String()
 		}
 		return event
-	} else {
-		event = "暂无历史今天的性少数群体历程\n你可以前往 GitHub (https://github.com/LGBT-CN/HistoryToday/edit/master/data.json) 提交数据"
-		return event
 	}
+	event = "暂无历史今天的性少数群体历程\n你可以前往 GitHub (https://github.com/LGBT-CN/HistoryToday/edit/master/data.json) 提交数据"
+	return event
 }
