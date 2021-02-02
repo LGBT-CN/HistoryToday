@@ -2,4 +2,4 @@
 
 ## License
 
-HistoryToday © [LGBT-CN](https://github.com/LGBT-CN), Released under [MIT License](https://github.com/LGBT-CN/HistoryToday/blob/master/LICENSE).
+HistoryToday © [LGBT-CN](https://github.com/LGBT-CN), licensed under [MIT License](https://github.com/LGBT-CN/HistoryToday/blob/master/LICENSE).
