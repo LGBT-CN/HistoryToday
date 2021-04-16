@@ -59,6 +59,10 @@ func historyToday(month, day string) string {
 		return tip.String() + "\n=====\n\n" + eventList(month, day) + "\n" + today
 	}
 
+	if isTest {
+		return "[TEST]\n" + eventList(month, day) + "\n" + today
+	}
+
 	return eventList(month, day) + "\n" + today
 }
 
@@ -70,11 +74,9 @@ func eventList(month, day string) string {
 		for i := 0; i < count; i++ {
 			event = event + "\n" + (gjson.Get(string(data), month+"."+day+"."+strconv.Itoa(i))).String()
 		}
+
 		return event
 	}
 	event = "暂无历史今天的性少数群体历程\n你可以[前往 GitHub 提交数据](https://github.com/LGBT-CN/HistoryToday/edit/master/data.json)"
-	if isTest {
-		return "[TEST]" + event
-	}
 	return event
 }
