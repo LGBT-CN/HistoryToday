@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"strconv"
@@ -46,8 +47,14 @@ func main() {
 	c := os.Getenv("Chat_ID")
 	ChatID, _ := strconv.ParseInt(c, 10, 64)
 	bot.Start()
-	bot.Send(tele.ChatID(ChatID), historyToday(month, day), tele.NoPreview, "Markdown")
+   	_, errS := bot.Send(tele.ChatID(ChatID), historyToday(month, day), tele.NoPreview, "Markdown")
 
+	// After sending msg, exit, cuz it boosts by CI/FaaS & Cron
+   	if errS == nil {
+		os.Exit(0)
+	}
+	fmt.Println(err)
+	os.Exit(1)
 }
 
 func historyToday(month, day string) string {
