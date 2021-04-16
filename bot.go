@@ -15,12 +15,23 @@ import (
 
 const dataFile = "data.json"
 
+var isTest = false
+
 var (
 	Token   string
 	Chat_ID string
 )
 
 func main() {
+	t := os.Getenv("lgbtcntest")
+	if t == "" {
+		isTest = false
+	}
+	b, err := strconv.ParseBool(t)
+	if err == nil {
+		isTest = b
+	}
+
 	bot, err := tele.NewBot(tele.Settings{Token: os.Getenv(Token)})
 	if err != nil {
 		log.Fatal(err)
@@ -60,5 +71,8 @@ func eventList(month, day string) string {
 		return event
 	}
 	event = "暂无历史今天的性少数群体历程\n你可以[前往 GitHub 提交数据](https://github.com/LGBT-CN/HistoryToday/edit/master/data.json)"
+	if isTest {
+		return "[TEST]" + event
+	}
 	return event
 }

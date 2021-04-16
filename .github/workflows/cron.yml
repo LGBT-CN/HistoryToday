@@ -1,8 +1,8 @@
 name: Cron
 
-on: 
+on:
   schedule:
-  - cron: "0 8 * * *"
+    - cron: "0 8 * * *"
 
 jobs:
   Cron:
@@ -10,9 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
-        with: 
+        with:
           go-version: "^1.16.3"
       - run: go run bot.go
         env:
-            Token: ${{ secrets.Token }}
-            Chat_ID: ${{ secrets.Chat_ID}}
+          Token: ${{ secrets.Token }}
+          Chat_ID: ${{ secrets.Chat_ID}}
