@@ -14,6 +14,7 @@ import (
 )
 
 const dataFile = "data.json"
+const timeout = 5
 
 var isTest = false
 
@@ -27,7 +28,13 @@ func main() {
 		isTest = b
 	}
 
-	bot, err := tele.NewBot(tele.Settings{Token: os.Getenv("Token")})
+	bot, err := tele.NewBot(
+		tele.Settings{
+			Token: os.Getenv("Token"),
+			Poller: &tele.LongPoller{Timeout: timeout * time.Second,
+			},
+		},
+	)
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -38,9 +45,9 @@ func main() {
 
 	c := os.Getenv("Chat_ID")
 	ChatID, _ := strconv.ParseInt(c, 10, 64)
-
-	bot.Send(tele.ChatID(ChatID), historyToday(month, day), tele.NoPreview, "Markdown")
 	bot.Start()
+	bot.Send(tele.ChatID(ChatID), historyToday(month, day), tele.NoPreview, "Markdown")
+
 }
 
 func historyToday(month, day string) string {
