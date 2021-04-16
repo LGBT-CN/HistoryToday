@@ -17,11 +17,6 @@ const dataFile = "data.json"
 
 var isTest = false
 
-var (
-	Token   string
-	Chat_ID string
-)
-
 func main() {
 	t := os.Getenv("lgbtcntest")
 	if t == "" {
@@ -32,7 +27,7 @@ func main() {
 		isTest = b
 	}
 
-	bot, err := tele.NewBot(tele.Settings{Token: os.Getenv(Token)})
+	bot, err := tele.NewBot(tele.Settings{Token: os.Getenv("Token")})
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -41,7 +36,7 @@ func main() {
 	month := time.Now().Format("01")
 	day := time.Now().Format("02")
 
-	c := os.Getenv(Chat_ID)
+	c := os.Getenv("Chat_ID")
 	ChatID, _ := strconv.ParseInt(c, 10, 64)
 
 	bot.Send(tele.ChatID(ChatID), historyToday(month, day), tele.NoPreview, "Markdown")
