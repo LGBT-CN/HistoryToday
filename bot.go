@@ -2,9 +2,9 @@ package main
 
 import (
 	"io/ioutil"
+	"os"
 	"strconv"
 
-	"github.com/robfig/cron/v3"
 	"github.com/tidwall/gjson"
 
 	"log"
@@ -13,17 +13,15 @@ import (
 	tele "gopkg.in/tucnak/telebot.v2"
 )
 
-const (
-	spec        = "0 0 0 * * ?"
-	telegramAPI = ""
-	botToken    = "1111111111:***********************************"
-	timeout     = 10
-	gid         = 1010001100
-	dataFile    = "data.json"
+const dataFile = "data.json"
+
+var (
+	Token   string
+	Chat_ID string
 )
 
 func main() {
-	bot, err := tele.NewBot(tele.Settings{URL: telegramAPI, Token: botToken, Poller: &tele.LongPoller{Timeout: timeout * time.Second}})
+	bot, err := tele.NewBot(tele.Settings{Token: os.Getenv(Token)})
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -32,18 +30,10 @@ func main() {
 	month := time.Now().Format("01")
 	day := time.Now().Format("02")
 
-	bot.Handle("/today", func(msg *tele.Message) {
-		bot.Send(msg.Chat, historyToday(month, day), tele.NoPreview, "Markdown")
-	})
+	c := os.Getenv(Chat_ID)
+	ChatID, _ := strconv.ParseInt(c, 10, 64)
 
-	// 定时
-	crontab := cron.New(cron.WithSeconds())
-	task := func() {
-		bot.Send(tele.ChatID(gid), historyToday(month, day), tele.NoPreview, "Markdown")
-	}
-	crontab.AddFunc(spec, task)
-
-	crontab.Start()
+	bot.Send(tele.ChatID(ChatID), historyToday(month, day), tele.NoPreview, "Markdown")
 	bot.Start()
 }
 
@@ -60,7 +50,7 @@ func historyToday(month, day string) string {
 }
 
 func eventList(month, day string) string {
-	data, _ := ioutil.ReadFile("data.json")
+	data, _ := ioutil.ReadFile(dataFile)
 	count, _ := strconv.Atoi((gjson.Get(string(data), month+"."+day+".#")).String())
 	event := ""
 	if (gjson.Get(string(data), month+"."+day+".0")).String() != "" {
@@ -69,6 +59,6 @@ func eventList(month, day string) string {
 		}
 		return event
 	}
-	event = "暂无历史今天的性少数群体历程\n你可以前往 GitHub (https://github.com/LGBT-CN/HistoryToday/edit/master/data.json) 提交数据"
+	event = "暂无历史今天的性少数群体历程\n你可以[前往 GitHub 提交数据](https://github.com/LGBT-CN/HistoryToday/edit/master/data.json)"
 	return event
 }
