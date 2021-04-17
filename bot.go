@@ -41,7 +41,7 @@ func main() {
 
 	if err != nil {
 		log.Fatal(err)
-		return
+		os.Exit(1)
 	}
 
 	fmt.Println("[I] BOT CREATED WITHOUT ANY ERR.")
@@ -50,7 +50,15 @@ func main() {
 	day := time.Now().Format("02")
 
 	c := os.Getenv("Chat_ID")
-	ChatID, _ := strconv.ParseInt(c, 10, 64)
+	ChatID, errC := strconv.ParseInt(c, 10, 64)
+
+	if errC != nil {
+		fmt.Println("[E] CAN NOT PARSE CHAR_ID TO INT! EXIT!")
+		os.Exit(1)
+	}
+
+	fmt.Println("[I] GET CHAT_ID SUCCESSFULLY")
+
 	bot.Start()
    	_, errS := bot.Send(tele.ChatID(ChatID), historyToday(month, day), tele.NoPreview, "Markdown")
 
