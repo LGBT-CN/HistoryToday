@@ -29,6 +29,8 @@ func main() {
 		isTest = b
 	}
 
+	fmt.Printf("[I] TEST MODE: %v\n", isTest)
+
 	bot, err := tele.NewBot(
 		tele.Settings{
 			Token: os.Getenv("Token"),
@@ -36,10 +38,13 @@ func main() {
 			},
 		},
 	)
+
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
+
+	fmt.Println("[I] BOT CREATED WITHOUT ANY ERR.")
 
 	month := time.Now().Format("01")
 	day := time.Now().Format("02")
@@ -48,6 +53,8 @@ func main() {
 	ChatID, _ := strconv.ParseInt(c, 10, 64)
 	bot.Start()
    	_, errS := bot.Send(tele.ChatID(ChatID), historyToday(month, day), tele.NoPreview, "Markdown")
+
+	fmt.Println("[I] MSG SENT. EXITING.")
 
 	// After sending msg, exit, cuz it boosts by CI/FaaS & Cron
    	if errS == nil {
