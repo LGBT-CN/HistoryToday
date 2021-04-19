@@ -2,7 +2,9 @@ name: Cron
 
 on:
   schedule:
-    - cron: "0 8 * * *"
+    - cron: "0 2 * * *"
+    # Assume that run at UTC+8 10:00
+    # Convert To UTC -> 10:00 - 8:00 = 2:00
 
 jobs:
   Cron:
